@@ -33,7 +33,7 @@ L.marker([51.505, - 0.09],{icon: markerIcon}).addTo(map)
 
 function getData() {
     if (validateIp(ipInput.value)) {
-        fetch(`https://geo.ipify.org/api/v2/country?apiKey=at_vebQkfyAhmQfwXZul55Fj1qus9HgU&ipAddress=${ipInput.value}`)
+        fetch(`https://geo.ipify.org/api/v2/country,city?apiKey=at_vebQkfyAhmQfwXZul55Fj1qus9HgU&ipAddress=${ipInput.value}`)
         .then(response => response.json())
         .then(setInfo)
     }
@@ -46,9 +46,17 @@ function handleKey(e) {
 }
 
 function setInfo(mapData) {
-    console.log(mapData);
+
+ 
+    const {lat, lng, country, region, timezone} = mapData.location
+
     ipInfo.innerText = mapData.ip
-    locationInfo.innerText = mapData.location.country + " " + mapData.location.region
-    timeZone.innerText = mapData.location.timezone
+    locationInfo.innerText = country + " " + region
+    timeZone.innerText = timezone
     IspInfo.innerText = mapData.isp
+    // console.log(mapData)
+
+// установить значение для отображения
+     map.setView([lat, lng])
+     L.marker([lat, lng], {icon: markerIcon}).addTo(map)
 }
